@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Sede } from '../../sede/entities/sede.entity';
 
 @Entity('tb_companies')
 export class Companies {
@@ -13,4 +14,7 @@ export class Companies {
 
   @Column({ type: 'varchar', length: 255 })
   bussinesName: string;
+
+  @OneToMany(() => Sede, (sede) => sede.company)
+  sedes: Sede[];
 }
