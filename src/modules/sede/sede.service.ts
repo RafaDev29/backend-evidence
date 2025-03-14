@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Sede } from './entities/sede.entity';
@@ -19,11 +19,28 @@ export class SedeService {
   }
 
   async create(companyId: number, createSedeDto: CreateSedeDto): Promise<Sede> {
-    const company = await this.companiesRepository.findOneBy({ id: companyId });
+    // Validar si la compañía existe
+    const company = await this.companiesRepository.findOne({
+      where: { id: companyId },
+    });
+
     if (!company) {
-      throw new Error('Company not found');
+      throw new NotFoundException('Company not found'); // Esto lanza un error 404
     }
-    const sede = this.sedeRepository.create({ ...createSedeDto, company });
-    return this.sedeRepository.save(sede);
+
+    // Validar si el código ya existe en otra sede de la misma compañía
+    const existingSede = await this.sedeRepository.findOne({
+      where: { code: createSedeDto.code, company: { id: companyId } },
+    });
+
+    if (existingSede) {
+      throw new ConflictException(
+        'A sede with this code already exists for this company',
+      );
+    }
+
+    // Crear y guardar la sede si la compañía existe y el código es único
+    const newSede = this.sedeRepository.create({ ...createSedeDto, company });
+    return await this.sedeRepository.save(newSede);
   }
 }

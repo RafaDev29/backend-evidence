@@ -7,18 +7,16 @@ import { CreateSedeDto } from './dto/create-sede.dto';
 export class SedeController {
   constructor(private readonly sedeService: SedeService) {}
 
-  // Endpoint para listar todas las sedes
-  @Get()
+  @Get('/all')
   async findAll(@Res() res: Response) {
     const sedes = await this.sedeService.findAll();
     return res.locals.response('Sedes retrieved successfully', sedes);
   }
 
-  // Endpoint para crear una nueva sede
   @Post(':companyId')
   async create(
     @Param('companyId') companyId: number,
-    @Body() createSedeDto: CreateSedeDto, // Aquí usamos el DTO
+    @Body() createSedeDto: CreateSedeDto,
     @Res() res: Response,
   ) {
     const sede = await this.sedeService.create(companyId, createSedeDto);

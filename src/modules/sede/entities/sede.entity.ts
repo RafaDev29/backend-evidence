@@ -10,6 +10,9 @@ export class Sede {
   name: string;
 
   @Column({ type: 'varchar', length: 255 })
+  direction: string;
+
+  @Column({ type: 'varchar', length: 255 })
   code: string;
 
   @ManyToOne(() => Companies, (company) => company.sedes, { onDelete: 'CASCADE' })
