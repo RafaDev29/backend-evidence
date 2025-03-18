@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Companies } from '../../companies/entities/companies.entity';
+import { Evidence } from 'src/modules/evidence/entities/evidence.entity';
 
 @Entity('tb_sede')
 export class Sede {
@@ -17,4 +18,7 @@ export class Sede {
 
   @ManyToOne(() => Companies, (company) => company.sedes, { onDelete: 'CASCADE' })
   company: Companies;
+
+  @OneToMany(() => Evidence, (evidence) => evidence.sede)
+    evidences: Evidence[];
 }

@@ -19,16 +19,13 @@ export class SedeService {
   }
 
   async create(companyId: number, createSedeDto: CreateSedeDto): Promise<Sede> {
-    // Validar si la compañía existe
     const company = await this.companiesRepository.findOne({
       where: { id: companyId },
     });
 
     if (!company) {
-      throw new NotFoundException('Company not found'); // Esto lanza un error 404
+      throw new NotFoundException('Company not found'); 
     }
-
-    // Validar si el código ya existe en otra sede de la misma compañía
     const existingSede = await this.sedeRepository.findOne({
       where: { code: createSedeDto.code, company: { id: companyId } },
     });
@@ -38,8 +35,6 @@ export class SedeService {
         'A sede with this code already exists for this company',
       );
     }
-
-    // Crear y guardar la sede si la compañía existe y el código es único
     const newSede = this.sedeRepository.create({ ...createSedeDto, company });
     return await this.sedeRepository.save(newSede);
   }
