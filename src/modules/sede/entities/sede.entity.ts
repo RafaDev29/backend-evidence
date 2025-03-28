@@ -1,8 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Companies } from '../../companies/entities/companies.entity';
-import { Evidence } from 'src/modules/evidence/entities/evidence.entity';
+import { Evidence } from 'src/modules/evidence/entities/evidence.entity';  // <-- Mayúscula correcta
 
-@Entity('tb_sede')
+
+
+@Entity('tb_sede') 
 export class Sede {
   @PrimaryGeneratedColumn()
   id: number;
@@ -20,5 +22,7 @@ export class Sede {
   company: Companies;
 
   @OneToMany(() => Evidence, (evidence) => evidence.sede)
-    evidences: Evidence[];
+  evidences: Evidence[]; 
+  
+
 }

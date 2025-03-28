@@ -8,5 +8,5 @@ export const databaseConfig: TypeOrmModuleOptions = {
   password: 'Rafaga4$', 
   database: 'bd_citv', 
   autoLoadEntities: true, 
-  synchronize: false, 
+  synchronize: true, 
 };
